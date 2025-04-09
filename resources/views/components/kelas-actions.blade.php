@@ -1,18 +1,15 @@
 <div class="flex items-center space-x-2">
     @if ($kelas->kelas_status === 'active')
-        {{-- Tombol Show --}}
         <a href="{{ route('kelas.show', $kelas->id) }}"
             class="inline-flex items-center px-3 py-1.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">
             Lihat
         </a>
 
-        {{-- Tombol Edit --}}
         <a href="{{ route('kelas.edit', $kelas->id) }}"
             class="inline-flex items-center px-3 py-1.5 bg-yellow-400 text-white text-sm rounded hover:bg-yellow-500 transition">
             Edit
         </a>
 
-        {{-- Tombol Delete --}}
         <form action="{{ route('kelas.destroy', $kelas->id) }}" method="POST" id="deleteForm{{ $kelas->id }}"
             style="display:none;">
             @csrf
@@ -39,7 +36,6 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // Submit the form if confirmed
                 document.getElementById('deleteForm' + id).submit();
             }
         });

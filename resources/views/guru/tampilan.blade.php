@@ -7,9 +7,7 @@
             class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow inline-flex items-center space-x-2 transition" />
     </div>
 
-    {{-- Filter dan Search --}}
     <form method="GET" action="{{ route('guru.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {{-- Limit tampil per halaman --}}
         <div class="flex flex-col">
             <label for="perPage" class="text-sm text-gray-700 mb-1">Tampilkan per halaman:</label>
             <select name="perPage" id="perPage" onchange="this.form.submit()"
@@ -22,7 +20,6 @@
             </select>
         </div>
 
-        {{-- Filter kelas --}}
         <div class="flex flex-col">
             <label for="kelas_id" class="text-sm text-gray-700 mb-1">Filter berdasarkan Kelas:</label>
             <select name="kelas_id" id="kelas_id" onchange="this.form.submit()" class="w-full border-gray-300 rounded-lg px-3 py-2 text-sm shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
@@ -35,7 +32,6 @@
             </select>
         </div>
 
-        {{-- Search --}}
         <div class="flex flex-col">
             <label for="search" class="text-sm text-gray-700 mb-1">Pencarian Nama/Email:</label>
             <div class="flex">
@@ -50,7 +46,6 @@
         </div>
     </form>
 
-    {{-- Tabel --}}
     <x-responsive-table :headers="['Nama Guru', 'Email', 'Kelas', 'Status Guru', 'Aksi']" :rows="$guru
         ->map(
             fn($s) => [
@@ -63,7 +58,6 @@
         )
         ->toArray()" class="bg-white rounded-lg shadow overflow-hidden" />
 
-    {{-- Pagination --}}
     <div class="mt-6">
         {{ $guru->appends(request()->query())->links() }}
     </div>

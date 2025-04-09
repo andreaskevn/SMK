@@ -50,7 +50,6 @@
         </div>
     </form>
 
-    {{-- Tabel --}}
     <x-responsive-table :headers="['Nama Siswa', 'Email', 'Kelas', 'Status Siswa', 'Aksi']" :rows="$siswa
         ->map(
             fn($s) => [
@@ -63,7 +62,6 @@
         )
         ->toArray()" class="bg-white rounded-lg shadow overflow-hidden" />
 
-    {{-- Pagination --}}
     <div class="mt-6">
         {{ $siswa->appends(request()->query())->links() }}
     </div>

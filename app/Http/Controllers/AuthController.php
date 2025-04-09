@@ -34,7 +34,7 @@ class AuthController extends Controller
             'id_role' => 1,
         ]);
 
-        Auth::login($user); // langsung login setelah register
+        Auth::login($user);
 
         return redirect('/dashboard');
     }

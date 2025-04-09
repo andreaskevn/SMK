@@ -14,13 +14,10 @@
 
     <div x-data="{ sidebarOpen: false }" class="flex h-screen overflow-hidden">
 
-        {{-- Sidebar Component --}}
         @include('components.sidebar')
 
-        <!-- Main Content -->
         <div class="flex flex-col flex-1 w-full md:ml-0 h-screen overflow-hidden p-4">
 
-            <!-- Mobile Header -->
             <header class="md:hidden bg-white shadow p-4 flex items-center justify-between">
                 <button @click="sidebarOpen = !sidebarOpen" class="text-gray-700 text-2xl">
                     <i data-feather="menu"></i>
@@ -28,10 +25,8 @@
                 <h1 class="text-lg font-semibold text-gray-800">{{ $title ?? 'Dashboard' }}</h1>
             </header>
 
-            <!-- Desktop Headbar -->
             <x-headbar :user="Auth::user()" />
 
-            <!-- Main Scrollable Content -->
             <main class="flex-1 overflow-y-auto bg-white p-4">
                 @yield('content')
             </main>

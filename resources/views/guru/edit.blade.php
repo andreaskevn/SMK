@@ -8,7 +8,6 @@
             @csrf
             @method('PUT')
 
-            {{-- Nama --}}
             <div>
                 <label for="users_name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
                 <input type="text" name="users_name" id="users_name" value="{{ old('users_name', $guru->users_name) }}"
@@ -19,7 +18,6 @@
                 @enderror
             </div>
 
-            {{-- Email --}}
             <div>
                 <label for="users_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input type="email" name="users_email" id="users_email"
@@ -31,7 +29,6 @@
                 @enderror
             </div>
 
-            {{-- Tombol Aksi --}}
             <div class="flex justify-end space-x-2">
                 <a href="{{ route('guru.index') }}"
                     class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">Batal</a>

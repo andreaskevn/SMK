@@ -11,12 +11,11 @@ class UserController extends Controller
     public function indexSiswa(Request $request)
     {
         $search = $request->input('search');
-        $limit = $request->input('perPage', 5); // default 10
+        $limit = $request->input('perPage', 5);
         $kelasId = $request->input('kelas_id');
 
-        $query = User::with('kelas')->where('id_role', 1); // Role guru
+        $query = User::with('kelas')->where('id_role', 1);
 
-        // Filter search
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('users_name', 'like', "%{$search}%")
@@ -24,7 +23,6 @@ class UserController extends Controller
             });
         }
 
-        // Filter kelas jika dipilih
         if ($kelasId) {
             $query->whereHas('kelas', function ($q) use ($kelasId) {
                 $q->where('kelas.id', $kelasId);
@@ -32,7 +30,7 @@ class UserController extends Controller
         }
 
         $siswa = $query->paginate($limit)->withQueryString();
-        $semuaKelas = \App\Models\Kelas::all(); // Pastikan model Kelas sudah diimport
+        $semuaKelas = Kelas::all();
 
         return view('siswa.tampilan', compact('siswa', 'search', 'limit', 'semuaKelas'));
     }
@@ -52,22 +50,20 @@ class UserController extends Controller
         User::create([
             'users_name' => $validated['users_name'],
             'users_email' => $validated['users_email'],
-            'password' => Hash::make('password123'), // password default
-            'id_role' => 1, // 1 = siswa
+            'password' => Hash::make('password123'),
+            'id_role' => 1,
             'users_status' => 'active',
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Siswa berhasil ditambahkan.');
     }
 
-    // Tampilkan form edit siswa
     public function editSiswa($id)
     {
         $siswa = User::where('id', $id)->where('id_role', 1)->firstOrFail();
         return view('siswa.edit', compact('siswa'));
     }
 
-    // Proses update siswa
     public function updateSiswa(Request $request, $id)
     {
         $siswa = User::where('id', $id)->where('id_role', 1)->firstOrFail();
@@ -98,12 +94,11 @@ class UserController extends Controller
     public function indexGuru(Request $request)
     {
         $search = $request->input('search');
-        $limit = $request->input('perPage', 5); // default 10
+        $limit = $request->input('perPage', 5);
         $kelasId = $request->input('kelas_id');
 
-        $query = User::with('kelas')->where('id_role', 2); // Role guru
+        $query = User::with('kelas')->where('id_role', 2);
 
-        // Filter search
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('users_name', 'like', "%{$search}%")
@@ -111,7 +106,6 @@ class UserController extends Controller
             });
         }
 
-        // Filter kelas jika dipilih
         if ($kelasId) {
             $query->whereHas('kelas', function ($q) use ($kelasId) {
                 $q->where('kelas.id', $kelasId);
@@ -119,7 +113,7 @@ class UserController extends Controller
         }
 
         $guru = $query->paginate($limit)->withQueryString();
-        $semuaKelas = \App\Models\Kelas::all(); // Pastikan model Kelas sudah diimport
+        $semuaKelas = \App\Models\Kelas::all();
 
         return view('guru.tampilan', compact('guru', 'search', 'limit', 'semuaKelas'));
     }
@@ -140,7 +134,7 @@ class UserController extends Controller
         User::create([
             'users_name' => $validated['users_name'],
             'users_email' => $validated['users_email'],
-            'password' => Hash::make('password123'), // password default
+            'password' => Hash::make('password123'),
             'id_role' => 2, // 2 = guru
             'users_status' => 'active',
         ]);
@@ -148,10 +142,9 @@ class UserController extends Controller
         return redirect()->route('guru.index')->with('success', 'Guru berhasil ditambahkan.');
     }
 
-    // Tampilkan form edit guru
     public function editGuru($id)
     {
-        $guru = User::where('id', $id)->where('id_role', 2)->firstOrFail(); // 2 = guru
+        $guru = User::where('id', $id)->where('id_role', 2)->firstOrFail();
         return view('guru.edit', compact('guru'));
     }
 

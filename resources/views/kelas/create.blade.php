@@ -50,7 +50,6 @@
                 @enderror
             </div>
 
-            {{-- Tombol --}}
             <div class="flex justify-end space-x-2">
                 <a href="{{ route('kelas.index') }}"
                     class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">Batal</a>
@@ -78,8 +77,8 @@
             dropArea.classList.remove('border-indigo-600');
             const files = event.dataTransfer.files;
             if (files.length > 0) {
-                fileInput.files = files; // Set the file input's files property
-                fileUploadLabel.textContent = files[0].name; // Display the file name
+                fileInput.files = files; 
+                fileUploadLabel.textContent = files[0].name;
             }
         });
 

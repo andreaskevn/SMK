@@ -1,12 +1,10 @@
 <div class="flex items-center space-x-2">
     @if ($siswa->users_status === 'active')
-        {{-- Tombol Edit --}}
         <a href="{{ route('siswa.edit', $siswa->id) }}"
             class="inline-flex items-center px-3 py-1.5 bg-yellow-400 text-white text-sm rounded hover:bg-yellow-500 transition">
             Edit
         </a>
 
-        {{-- Tombol Delete --}}
         <form action="{{ route('siswa.destroy', $siswa->id) }}" method="POST" id="deleteForm{{ $siswa->id }}" style="display:none;">
             @csrf
             @method('DELETE')
@@ -33,7 +31,6 @@
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // Submit the form if confirmed
                 document.getElementById('deleteForm' + id).submit();
             }
         });

@@ -14,19 +14,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Seeder untuk 50 siswa
         for ($i = 1; $i <= 50; $i++) {
             User::create([
                 'users_name' => "Siswa $i",
                 'users_email' => "siswa$i@example.com",
                 'id_role' => 1,
-                'password' => Hash::make('password'), // default password
+                'password' => Hash::make('password'),
                 'users_status' => 'active',
                 'remember_token' => Str::random(10),
             ]);
         }
 
-        // Seeder untuk 20 guru
         for ($i = 1; $i <= 20; $i++) {
             User::create([
                 'users_name' => "Guru $i",
@@ -38,7 +36,6 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        // Seeder untuk 1 admin
         User::create([
             'users_name' => "Admin",
             'users_email' => "admin@example.com",

@@ -23,12 +23,10 @@
     </div>
 
     <script>
-        // Data dari controller
         const labels = @json($labels);
         const siswaData = @json($siswaData);
         const guruData = @json($guruData);
 
-        // Chart Bar
         new Chart(document.getElementById('kelasChart'), {
             type: 'bar',
             data: {
@@ -55,7 +53,6 @@
             }
         });
 
-        // Doughnut Chart
         new Chart(document.getElementById('pieChart'), {
             type: 'doughnut',
             data: {

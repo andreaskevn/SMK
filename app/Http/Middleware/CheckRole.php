@@ -21,6 +21,6 @@ class CheckRole
             return $next($request);
         }
 
-        return redirect('/'); // Redirect jika peran tidak sesuai
+        return redirect('/'); 
     }
 }

@@ -7,9 +7,7 @@
             class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow inline-flex items-center space-x-2 transition" />
     </div>
 
-    {{-- Filter & Search --}}
     <form method="GET" class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        {{-- Limit tampil per halaman --}}
         <div class="flex items-center space-x-2">
             <label for="perPage" class="text-sm text-gray-700">Tampilkan:</label>
             <select name="perPage" id="perPage" onchange="this.form.submit()"
@@ -21,7 +19,6 @@
             </select>
         </div>
 
-        {{-- Search --}}
         <div class="flex w-full md:w-1/2 space-x-2">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kelas..."
                 class="flex-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
@@ -33,7 +30,6 @@
         </div>
     </form>
 
-    {{-- Tabel Daftar Kelas --}}
     <x-responsive-table :headers="['Nama Kelas', 'Jumlah Siswa', 'Jumlah Guru', 'Kode Kelas', 'Status', 'Aksi']" :rows="$kelas
         ->map(
             fn($k) => [
@@ -48,7 +44,6 @@
         ->toArray()" class="bg-white rounded-lg shadow overflow-hidden" />
 
 
-    {{-- Pagination --}}
     <div class="mt-6">
         {{ $kelas->appends(request()->query())->links() }}
     </div>

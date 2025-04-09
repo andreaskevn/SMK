@@ -13,7 +13,6 @@ class DashboardController extends Controller
         $totalGuru = User::where('id_role', 2)->count();
         $totalKelas = Kelas::count();
 
-        // Ambil kelas dengan jumlah siswa terbanyak (top 5)
         $kelas = Kelas::withCount(['users as siswa_count' => function ($query) {
             $query->where('id_role', 1);
         }])
