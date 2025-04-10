@@ -74,7 +74,6 @@
                 </table>
             </div>
 
-            <!-- Hidden input untuk data dikirim saat submit -->
             <input type="hidden" name="user_data" id="userData">
 
             <div class="flex justify-end space-x-2">
@@ -86,9 +85,7 @@
         </form>
     </div>
 
-    {{-- Script --}}
     <script>
-        // Data user yang sudah tergabung dalam kelas
         let userList = @json($kelas->users->map(function($user) {
             return [
                 'id' => $user->id,
@@ -164,7 +161,6 @@
             document.getElementById('userData').value = JSON.stringify(userList);
         }
 
-        // Render saat halaman dimuat
         renderTable();
     </script>
 @endsection

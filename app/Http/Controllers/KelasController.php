@@ -112,13 +112,11 @@ class KelasController extends Controller
             'kelas_capacity.max' => 'Kapasitas maksimal 30.',
         ]);
 
-        // Ambil data user (guru dan siswa) dari hidden input
         $data = json_decode($request->input('user_data'), true);
 
         $jumlahGuru = collect($data)->where('role', 2)->count();
         $jumlahTotal = count($data);
 
-        // Validasi jumlah guru dan kapasitas kelas
         if ($jumlahGuru > 5) {
             return back()->withErrors(['user_data' => 'Jumlah guru tidak boleh lebih dari 5.'])->withInput();
         }
@@ -127,17 +125,14 @@ class KelasController extends Controller
             return back()->withErrors(['user_data' => 'Jumlah total pengguna melebihi kapasitas kelas.'])->withInput();
         }
 
-        // Update data kelas
         $kelas->update([
             'kelas_name' => $request->kelas_name,
             'kelas_description' => $request->kelas_description,
             'kelas_capacity' => $request->kelas_capacity,
         ]);
 
-        // Hapus semua relasi sebelumnya
         $kelas->users()->detach();
 
-        // Tambahkan ulang user ke kelas
         foreach ($data as $user) {
             $kelas->users()->attach($user['id']);
         }
@@ -149,7 +144,7 @@ class KelasController extends Controller
     public function destroy($id)
     {
         $kelas = Kelas::findOrFail($id);
-        $kelas->delete(); // Soft delete
+        $kelas->delete(); 
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil dihapus.');
     }

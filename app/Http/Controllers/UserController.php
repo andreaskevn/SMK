@@ -123,15 +123,12 @@ class UserController extends Controller
             'kelas_id.*' => 'exists:kelas,id',
         ]);
 
-        // Update data user
         $siswa->update([
             'users_name' => $validated['users_name'],
             'users_email' => $validated['users_email'],
         ]);
 
-        // Update relasi kelas (jika ada)
         if ($request->has('kelas_id')) {
-            // Asumsinya relasi many-to-many antara users dan kelas
             $siswa->kelas()->sync($request->kelas_id);
         }
 

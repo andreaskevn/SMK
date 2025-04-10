@@ -4,21 +4,18 @@
     <form method="POST" action="{{ route('guru.store') }}" class="space-y-4">
         @csrf
 
-        {{-- Input Nama --}}
         <div>
             <label for="users_name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
             <input type="text" name="users_name" id="users_name" value="{{ old('users_name') }}"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
         </div>
 
-        {{-- Input Email --}}
         <div>
             <label for="users_email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <input type="email" name="users_email" id="users_email" value="{{ old('users_email') }}"
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg" required>
         </div>
 
-        {{-- Dropdown Pilih Kelas --}}
         <div class="flex items-center space-x-4">
             <div class="flex-1">
                 <label for="kelas_select" class="block text-sm font-medium text-gray-700 mb-1">Pilih Kelas</label>
@@ -46,7 +43,6 @@
             </div>
         </div>
 
-        {{-- Tabel Kelas yang Dipilih --}}
         <div>
             <table class="w-full mt-4 border">
                 <thead>
@@ -59,7 +55,6 @@
             </table>
         </div>
 
-        {{-- Tombol Simpan --}}
         <div class="flex justify-end">
             <button type="submit"
                 class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg shadow">Simpan</button>
@@ -75,7 +70,6 @@
             if (!selectedId) return;
 
 
-            // Cegah duplikasi
             if (document.getElementById('kelas-row-' + selectedId)) {
                 alert('Kelas sudah dipilih!');
                 return;
@@ -93,7 +87,6 @@
             `;
             tabel.appendChild(row);
 
-            // Reset dropdown
             select.selectedIndex = 0;
         }
 
