@@ -7,10 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 
 <body class="bg-gray-100 font-sans">
+    @if (session('alert'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: '{{ session('alert') }}',
+                    confirmButtonText: 'OK'
+                });
+            });
+        </script>
+    @endif
+
+
 
     <div x-data="{ sidebarOpen: false }" class="flex h-screen overflow-hidden">
 
@@ -32,7 +47,6 @@
             </main>
         </div>
     </div>
-
     <script>
         feather.replace();
     </script>

@@ -40,6 +40,12 @@
                             Siswa
                         </a>
                     </li>
+                    <li>
+                        <a href="/list"
+                            class="block py-2 px-4 rounded hover:bg-blue-100 {{ request()->is('list*') ? 'bg-blue-500 text-white' : 'text-gray-700' }}">
+                            List
+                        </a>
+                    </li>
                 </ul>
             </nav>
 

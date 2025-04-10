@@ -20,7 +20,6 @@ class UserSeeder extends Seeder
                 'users_email' => "siswa$i@example.com",
                 'id_role' => 1,
                 'password' => Hash::make('password'),
-                'users_status' => 'active',
                 'remember_token' => Str::random(10),
             ]);
         }
@@ -31,7 +30,6 @@ class UserSeeder extends Seeder
                 'users_email' => "guru$i@example.com",
                 'id_role' => 2,
                 'password' => Hash::make('password'),
-                'users_status' => 'active',
                 'remember_token' => Str::random(10),
             ]);
         }
@@ -41,7 +39,6 @@ class UserSeeder extends Seeder
             'users_email' => "admin@example.com",
             'id_role' => 3,
             'password' => Hash::make('admin123'),
-            'users_status' => 'active',
             'remember_token' => Str::random(10),
         ]);
     }

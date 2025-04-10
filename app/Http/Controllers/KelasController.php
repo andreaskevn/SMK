@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kelas;
+use App\Models\{Kelas, User};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
@@ -22,6 +22,7 @@ class KelasController extends Controller
             $query->where('kelas_name', 'like', "%{$search}%");
         }
 
+        $query->orderBy('created_at', 'desc');
         $kelas = $query->paginate($perPage);
 
         return view('kelas.tampilan', compact('kelas'));
@@ -37,8 +38,7 @@ class KelasController extends Controller
         $request->validate([
             'kelas_name' => 'required|string|max:255|unique:kelas,kelas_name',
             'kelas_description' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:5120',
-            'kelas_capacity' => 'required|integer',
+            'kelas_capacity' => 'required|integer|min:5|max:30',
         ], [
             // Rules utk nama kelas
             'kelas_name.required' => 'Nama kelas wajib diisi.',
@@ -51,32 +51,18 @@ class KelasController extends Controller
             'kelas_description.string' => 'Deskripsi kelas harus berupa teks.',
             'kelas_description.max' => 'Deskripsi kelas maksimal 255 karakter.',
 
-            // Rules utk gambar cover kelas
-            'image.required' => 'Cover kelas wajib diunggah.',
-            'image.image' => 'File harus berupa gambar.',
-            'image.mimes' => 'Gambar harus berformat JPG, JPEG, atau PNG.',
-            'image.max' => 'Ukuran gambar maksimal 5MB.',
-
             // Rules utk jumlah kapasitas maksimal kelas
             'kelas_capacity.required' => 'Kapasitas kelas wajib diisi.',
             'kelas_capacity.integer' => 'Kapasitas kelas harus berupa angka.',
+            'kelas_capacity.min' => 'Kapasitas kelas minimal 5.',
+            'kelas_capacity.max' => 'Kapasitas kelas maksimal 30.',
         ]);
         $kode = Str::upper(Str::random(6));
-        $filename = null;
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $manager = new ImageManager(new Driver());
-            $filename = time() . '.webp';
-            $image = $manager->read($file)->encode(new WebpEncoder(quality: 80));
-            $image->save(public_path('class_cover/' . $filename));
-        }
         Kelas::create([
             'kelas_name' => $request->kelas_name,
             'kelas_description' => $request->kelas_description,
-            'kelas_cover_header' => $filename,
             'kelas_capacity' => $request->kelas_capacity,
             'kelas_code' => $kode,
-            'kelas_status' => 'active',
 
         ]);
 
@@ -85,26 +71,31 @@ class KelasController extends Controller
 
     public function show($id)
     {
-        $kelas = Kelas::with('users')->findOrFail($id);
+        $kelas = Kelas::with(['users' => function ($query) {
+            $query->orderBy('id_role', 'desc');
+        }])->findOrFail($id);
+
         return view('kelas.show', compact('kelas'));
     }
 
+
     public function edit($id)
     {
-        $kelas = Kelas::findOrFail($id);
-
-        return view('kelas.edit', compact('kelas'));
+        $kelas = Kelas::with('users')->findOrFail($id);
+        $guruList = User::where('id_role', 2)->get();
+        $siswaList = User::where('id_role', 1)->get();
+        return view('kelas.edit', compact('kelas', 'guruList', 'siswaList'));
     }
 
     public function update(Request $request, $id)
     {
         $kelas = Kelas::findOrFail($id);
 
+        // Validasi input dasar
         $request->validate([
             'kelas_name' => 'required|string|max:255|unique:kelas,kelas_name,' . $kelas->id,
             'kelas_description' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-            'kelas_capacity' => 'required|integer',
+            'kelas_capacity' => 'required|integer|min:5|max:30',
         ], [
             'kelas_name.required' => 'Nama kelas wajib diisi.',
             'kelas_name.string' => 'Nama kelas harus berupa teks.',
@@ -115,39 +106,51 @@ class KelasController extends Controller
             'kelas_description.string' => 'Deskripsi harus berupa teks.',
             'kelas_description.max' => 'Deskripsi maksimal 255 karakter.',
 
-            'image.image' => 'File harus berupa gambar.',
-            'image.mimes' => 'Gambar harus JPG, JPEG, atau PNG.',
-            'image.max' => 'Ukuran gambar maksimal 5MB.',
-
             'kelas_capacity.required' => 'Kapasitas wajib diisi.',
             'kelas_capacity.integer' => 'Kapasitas harus angka.',
+            'kelas_capacity.min' => 'Kapasitas minimal 5.',
+            'kelas_capacity.max' => 'Kapasitas maksimal 30.',
         ]);
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $manager = new ImageManager(new Driver());
-            $filename = time() . '.webp';
-            $image = $manager->read($file)->encode(new WebpEncoder(quality: 80));
-            $image->save(public_path('class_cover/' . $filename));
-            $kelas->kelas_cover_header = $filename;
+        // Ambil data user (guru dan siswa) dari hidden input
+        $data = json_decode($request->input('user_data'), true);
+
+        $jumlahGuru = collect($data)->where('role', 2)->count();
+        $jumlahTotal = count($data);
+
+        // Validasi jumlah guru dan kapasitas kelas
+        if ($jumlahGuru > 5) {
+            return back()->withErrors(['user_data' => 'Jumlah guru tidak boleh lebih dari 5.'])->withInput();
         }
 
+        if ($jumlahTotal > $request->kelas_capacity) {
+            return back()->withErrors(['user_data' => 'Jumlah total pengguna melebihi kapasitas kelas.'])->withInput();
+        }
+
+        // Update data kelas
         $kelas->update([
             'kelas_name' => $request->kelas_name,
             'kelas_description' => $request->kelas_description,
             'kelas_capacity' => $request->kelas_capacity,
-            'kelas_status' => 'active',
         ]);
+
+        // Hapus semua relasi sebelumnya
+        $kelas->users()->detach();
+
+        // Tambahkan ulang user ke kelas
+        foreach ($data as $user) {
+            $kelas->users()->attach($user['id']);
+        }
 
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diperbarui.');
     }
 
+
     public function destroy($id)
     {
         $kelas = Kelas::findOrFail($id);
-        $kelas->update([
-            'kelas_status' => 'deleted',
-        ]);
+        $kelas->delete(); // Soft delete
+
         return redirect()->route('kelas.index')->with('success', 'Kelas berhasil dihapus.');
     }
 }

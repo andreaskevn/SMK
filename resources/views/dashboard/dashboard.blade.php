@@ -1,5 +1,5 @@
 @extends('layouts.app')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 @section('content')
     <div class="p-6">
         <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
@@ -21,7 +21,8 @@
             </div>
         </div>
     </div>
-
+    {{-- Chart.js --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const labels = @json($labels);
         const siswaData = @json($siswaData);

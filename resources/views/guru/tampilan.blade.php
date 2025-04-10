@@ -46,13 +46,12 @@
         </div>
     </form>
 
-    <x-responsive-table :headers="['Nama Guru', 'Email', 'Kelas', 'Status Guru', 'Aksi']" :rows="$guru
+    <x-responsive-table :headers="['Nama Guru', 'Email', 'Kelas','Aksi']" :rows="$guru
         ->map(
             fn($s) => [
                 $s->users_name,
                 $s->users_email,
                 $s->kelas->pluck('kelas_name')->join(', '),
-                view('components.status-badge', ['status' => $s->users_status])->render(),
                 view('components.guru-actions', ['guru' => $s])->render(),
             ],
         )

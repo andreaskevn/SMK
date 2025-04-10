@@ -1,5 +1,4 @@
 <div class="flex items-center space-x-2">
-    @if ($kelas->kelas_status === 'active')
         <a href="{{ route('kelas.show', $kelas->id) }}"
             class="inline-flex items-center px-3 py-1.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition">
             Lihat
@@ -20,7 +19,6 @@
             onclick="confirmDelete({{ $kelas->id }})">
             Hapus
         </button>
-    @endif
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

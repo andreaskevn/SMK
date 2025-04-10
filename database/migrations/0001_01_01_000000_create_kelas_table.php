@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('kelas_name')->unique();
             $table->string('kelas_description');
-            $table->string('kelas_cover_header');
-            $table->integer('kelas_capacity');
+            $table->integer('kelas_capacity')->max(30);
             $table->string('kelas_code')->unique();
-            $table->string('kelas_status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

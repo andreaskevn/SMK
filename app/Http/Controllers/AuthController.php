@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,10 +10,16 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function showLogin() {
+        if (Auth::check()) {
+            return redirect('/dashboard')->with('alert', 'Kamu sudah login!');
+        }        
         return view('auth.login');
     }
 
     public function showRegister() {
+        if (Auth::check()) {
+            return redirect('/dashboard')->with('alert', 'Kamu sudah login!');
+        }
         return view('auth.register');
     }
 
@@ -30,7 +34,6 @@ class AuthController extends Controller
             'users_name' => $request->users_name,
             'users_email' => $request->users_email,
             'password' => bcrypt($request->password),
-            'users_status' => 'active',
             'id_role' => 1,
         ]);
 

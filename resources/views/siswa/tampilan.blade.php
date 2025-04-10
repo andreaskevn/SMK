@@ -50,13 +50,12 @@
         </div>
     </form>
 
-    <x-responsive-table :headers="['Nama Siswa', 'Email', 'Kelas', 'Status Siswa', 'Aksi']" :rows="$siswa
+    <x-responsive-table :headers="['Nama Siswa', 'Email', 'Kelas', 'Aksi']" :rows="$siswa
         ->map(
             fn($s) => [
                 $s->users_name,
                 $s->users_email,
                 $s->kelas->pluck('kelas_name')->join(', '),
-                view('components.status-badge', ['status' => $s->users_status])->render(),
                 view('components.siswa-actions', ['siswa' => $s])->render(),
             ],
         )

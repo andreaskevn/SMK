@@ -10,26 +10,55 @@ class KelasUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $userIds = DB::table('users')->pluck('id')->toArray();
+        $guruIds = DB::table('users')->where('id_role', 2)->pluck('id')->toArray();
+        $muridIds = DB::table('users')->where('id_role', '!=', 2)->pluck('id')->toArray();
         $kelasIds = DB::table('kelas')->pluck('id')->toArray();
 
         $data = [];
         $usedCombinations = [];
 
-        while (count($data) < 100) {
-            $userId = $userIds[array_rand($userIds)];
-            $kelasId = $kelasIds[array_rand($kelasIds)];
-            $key = $userId . '-' . $kelasId;
+        foreach ($kelasIds as $kelasId) {
+            $usedGuru = [];
+            $usedMurid = [];
 
-            if (!isset($usedCombinations[$key])) {
-                $usedCombinations[$key] = true;
+            // Maksimal 5 guru
+            shuffle($guruIds);
+            for ($i = 0; $i < min(5, count($guruIds)); $i++) {
+                $userId = $guruIds[$i];
+                $key = $userId . '-' . $kelasId;
 
-                $data[] = [
-                    'user_id' => $userId,
-                    'kelas_id' => $kelasId,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ];
+                if (!isset($usedCombinations[$key])) {
+                    $usedCombinations[$key] = true;
+                    $usedGuru[] = $userId;
+
+                    $data[] = [
+                        'user_id' => $userId,
+                        'kelas_id' => $kelasId,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
+            }
+
+            // Sisa kapasitas untuk murid
+            $sisa = 30 - count($usedGuru);
+            shuffle($muridIds);
+
+            for ($i = 0; $i < min($sisa, count($muridIds)); $i++) {
+                $userId = $muridIds[$i];
+                $key = $userId . '-' . $kelasId;
+
+                if (!isset($usedCombinations[$key])) {
+                    $usedCombinations[$key] = true;
+                    $usedMurid[] = $userId;
+
+                    $data[] = [
+                        'user_id' => $userId,
+                        'kelas_id' => $kelasId,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
             }
         }
 

@@ -30,14 +30,14 @@
         </div>
     </form>
 
-    <x-responsive-table :headers="['Nama Kelas', 'Jumlah Siswa', 'Jumlah Guru', 'Kode Kelas', 'Status', 'Aksi']" :rows="$kelas
+    <x-responsive-table :headers="['Nama Kelas', 'Jumlah Siswa', 'Jumlah Guru', 'Kode Kelas', 'Kapasitas Kelas', 'Aksi']" :rows="$kelas
         ->map(
             fn($k) => [
                 $k->kelas_name,
                 $k->users->where('id_role', 1)->count(),
                 $k->users->where('id_role', 2)->count(),
-                view('components.status-badge', ['status' => $k->kelas_status])->render(),
                 $k->kelas_code,
+                $k->kelas_capacity,
                 view('components.kelas-actions', ['kelas' => $k])->render(),
             ],
         )

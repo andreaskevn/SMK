@@ -1,5 +1,4 @@
 <div class="flex items-center space-x-2">
-    @if ($guru->users_status === 'active')
         <a href="{{ route('guru.edit', $guru->id) }}"
             class="inline-flex items-center px-3 py-1.5 bg-yellow-400 text-white text-sm rounded hover:bg-yellow-500 transition">
             Edit
@@ -14,7 +13,6 @@
             onclick="confirmDelete({{ $guru->id }})">
             Hapus
         </button>
-    @endif
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
